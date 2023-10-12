@@ -17,5 +17,5 @@ FASTArecord * fastaAllocateRecord();
 int  fastaPrintRecord(FILE *ofp, FASTArecord *fRecord);
 void fastaClearRecord(FASTArecord *fRecord);
 void fastaDeallocateRecord(FASTArecord *fRecord);
-
+//void usage(char *progname);
 #endif /* __FASTA_RECORD_TOOLS_HEADER__ */
