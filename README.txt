@@ -9,28 +9,11 @@ Implementation State: currently incomplete (hope I update this when I'm done)
 Summary: 
 - a short summary of what you have learned about the relative amounts of time required to perform these tasks
 
-use description not sequence as key, dont use vs code for storage space, use append FIFO
 
-			/**
-			FASTArecord *array = NULL;
-			array = fastaAllocateRecord();
-			if (array == NULL) {
-        		fprintf(stderr, "Memory allocation failed.\n");
-				return -1;
-        	}	
-			for (int i=0;i<status; i++) {
-				array[i] = fastaAllocateRecord();
-				status = fastaReadRecord(fp, array[i]);
-				
-				if (array[i] == NULL) {
-        			fprintf(stderr, "Memory allocation failed.\n");
-					return -1;
-        		}	
-			}
-			fastaDeallocateRecord(array);
-			*/
+Notes: use description not sequence as key, dont use vs code for storage space, use append FIFO
 
-			
+
+Ideas:
 		LLvNode *l_head = NULL;
 		LLvNode *l_node = NULL;
 		LLvNode *l_node2 = NULL;

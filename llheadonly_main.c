@@ -4,7 +4,10 @@
 #include <time.h>
 #include <errno.h>
 
+#include "fasta.h"
 #include "fasta_read.c"
+#include "LLvNode.h"
+#include "LLvNode.c"
 
 int processFasta(char *filename, double *timeTaken) {
 
@@ -13,6 +16,8 @@ int processFasta(char *filename, double *timeTaken) {
 	int lineNumber = 0, recordNumber = 0, status;
 	int eofSeen = 0;
 	clock_t startTime, endTime;
+
+	LLvNode *l_head = NULL;
 
 	//open file
 	fp = fopen(filename, "r");
@@ -48,7 +53,16 @@ int processFasta(char *filename, double *timeTaken) {
 			lineNumber += status;
 			recordNumber++;
 			//fastaPrintRecord(stdout, &fRecord);
-			fastaClearRecord(&fRecord);
+			//fastaClearRecord(&fRecord);
+
+			//make a node
+			LLvNode *l_node = llNewNode(fRecord.description, fRecord.description);
+
+			//add node to end
+			l_head = llAppend(l_head, l_node);
+
+			//printf("%s - ", l_node->key);
+			
 
 		//if line read error
 		} else {
@@ -68,6 +82,17 @@ int processFasta(char *filename, double *timeTaken) {
 	(*timeTaken) = ((double) (endTime - startTime)) / CLOCKS_PER_SEC;
 
 	fclose(fp);
+
+	LLvNode *next;
+
+	for ( ; l_head != NULL; l_head = next) {
+
+		/** hang on to the next pointer */
+		next = l_head->next;
+
+		/** free the list node itself */
+		free(l_head);
+	}
 
 	return recordNumber;
 
