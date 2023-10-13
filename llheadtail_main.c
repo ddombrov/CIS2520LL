@@ -64,18 +64,19 @@ int processFasta(char *filename, double *timeTaken) {
 
 			//at start,tail= head, then make head get a node
 			if (l_tail == NULL) {
-                l_tail=l_node;
+
+                l_tail = l_node;
 				l_head = l_node; 
 				
             } 
 			
 			//then have tail point to last node
 			if (l_tail !=NULL) {
-				l_head = llAppend(l_head, l_node);
+				l_tail = llAppend(l_tail->next, l_node);
 				//l_tail=llPrepend(l_node, l_tail);
-                l_tail->next = l_node;
+                //l_tail->next = l_node;
 				//make tail the last node
-           		l_tail = l_node;   
+           		//l_tail = l_node;   
             }
 
 			
@@ -140,7 +141,7 @@ int processFastaRepeatedly(char *filename, long repeatsRequested) {
 
 	minutesPortion = (int) (totalTimeInSeconds / 60);
 	totalTimeInSeconds = totalTimeInSeconds - (60 * minutesPortion);
-	printf("On average: %d minutes, %lf second per run\n",  minutesPortion, totalTimeInSeconds);
+	printf("On average: %d minutes, %.3lf second per run\n",  minutesPortion, totalTimeInSeconds);
 
 	return status;
 

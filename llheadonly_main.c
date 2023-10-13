@@ -134,7 +134,7 @@ int processFastaRepeatedly(char *filename, long repeatsRequested) {
 
 	minutesPortion = (int) (totalTimeInSeconds / 60);
 	totalTimeInSeconds = totalTimeInSeconds - (60 * minutesPortion);
-	printf("On average: %d minutes, %.3f second per run\n",  minutesPortion, totalTimeInSeconds);
+	printf("On average: %d minutes, %.3lf second per run\n",  minutesPortion, totalTimeInSeconds);
 
 	return status;
 
