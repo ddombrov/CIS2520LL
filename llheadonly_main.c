@@ -56,7 +56,10 @@ int processFasta(char *filename, double *timeTaken) {
 			//fastaClearRecord(&fRecord);
 
 			//make a node
-			LLvNode *l_node = llNewNode(fRecord.description, fRecord.description);
+			void *value = malloc(sizeof(FASTArecord));
+			memcpy(value, &fRecord, sizeof(FASTArecord));
+
+			LLvNode *l_node = llNewNode(fRecord.description, value);
 
 			//add node to end
 			l_head = llAppend(l_head, l_node);
@@ -83,6 +86,13 @@ int processFasta(char *filename, double *timeTaken) {
 
 	fclose(fp);
 
+/*
+	for (LLvNode *next = l_head; next!=NULL; next=l_head ) {
+		l_head=l_head->next;
+		fastaDeallocateRecord(next->value);
+		free(next);
+	}
+	*/
 	LLvNode *next;
 
 	for ( ; l_head != NULL; l_head = next) {
@@ -91,6 +101,7 @@ int processFasta(char *filename, double *timeTaken) {
 		next = l_head->next;
 
 		/** free the list node itself */
+		fastaDeallocateRecord(l_head->value);
 		free(l_head);
 	}
 
@@ -123,7 +134,7 @@ int processFastaRepeatedly(char *filename, long repeatsRequested) {
 
 	minutesPortion = (int) (totalTimeInSeconds / 60);
 	totalTimeInSeconds = totalTimeInSeconds - (60 * minutesPortion);
-	printf("On average: %d minutes, %lf second per run\n",  minutesPortion, totalTimeInSeconds);
+	printf("On average: %d minutes, %.3f second per run\n",  minutesPortion, totalTimeInSeconds);
 
 	return status;
 
