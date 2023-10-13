@@ -9,11 +9,13 @@
 int processFasta(char *filename, double *timeTaken) {
 
 	FILE *fp;
-	FASTArecord fRecord;
+	FASTArecord *fRecord;
 	int lineNumber = 0, recordNumber = 0, status;
 	int eofSeen = 0;
 	clock_t startTime, endTime;
-	FASTArecord *array = malloc(sizeof(FASTArecord *));
+
+	FASTArecord *array = NULL;
+	int arraySize = 1; //not 0 because 0x2=0
 
 	//open file
 	fp = fopen(filename, "r");
@@ -34,11 +36,11 @@ int processFasta(char *filename, double *timeTaken) {
 		}
 
 		//Allocate and initialize a new FASTA record
-		fastaInitializeRecord(&fRecord);
+		fRecord=fastaAllocateRecord();
 
 		//status = lines read
 		//ensure the buffer allocated here is sufficient for that length
-		status = fastaReadRecord(fp, &fRecord);
+		status = fastaReadRecord(fp, fRecord);
 
 		//if no lines read
 		if (status == 0) {
@@ -47,36 +49,30 @@ int processFasta(char *filename, double *timeTaken) {
 		//if lines read
 		} else if (status > 0) {
 			lineNumber += status;
-			
-			//fastaPrintRecord(stdout, &fRecord);
-			//fastaClearRecord(&fRecord);
-
-			//allocate array's elements
-			//for (int i=0; i<recordNumber; i++) {
-				//array[i]=(FASTArecord *) malloc(sizeof(FASTArecord));
-			array[recordNumber] = * fastaAllocateRecord();
-			//}
-
-			//realloc array
-			//dont use array in if statement
-			long int arraySize = sizeof(array);
-			if ((recordNumber*sizeof(FASTArecord))>arraySize){
-				int l = arraySize*2;
-				array = (FASTArecord *)realloc(array, l);
-			}
-
 			recordNumber++;
 			
+			//once number of records match array size (array is full) then double arraySize and the size of the aeeay
+			if (recordNumber==arraySize) {
+				arraySize*=2;
+				array = (FASTArecord *)realloc(array, arraySize * sizeof(FASTArecord));
+			}
+
+			//working version of array[recordNumber]=fRecord;
+			memcpy(&(array[recordNumber]), fRecord, sizeof(FASTArecord));
+
 		//if line read error
 		} else {
 			fprintf(stderr, "status = %d\n", status);
 			fprintf(stderr, "Error: failure at line %d of '%s'\n", lineNumber, filename);
 			return -1;
 		}
+		
+		//free fRecord
+		fastaDeallocateRecord(fRecord);
 
 	} while ( ! eofSeen);
 
-	printf(" %d FASTA records-- %ld allocated (%ld%% waste)\n", recordNumber, sizeof(array), ((sizeof(array)-recordNumber*sizeof(FASTArecord *))*100));
+	printf(" %d FASTA records-- %d allocated (%.3f%% waste)\n", recordNumber, arraySize, ((double)(arraySize-recordNumber)*100/(arraySize)));
 
 	/** record the time now, when the work is done,
 	 *  and calculate the difference*/
@@ -84,12 +80,7 @@ int processFasta(char *filename, double *timeTaken) {
 
 	(*timeTaken) = ((double) (endTime - startTime)) / CLOCKS_PER_SEC;
 
-	//free array and it's elements
-	for (int i=0; i<recordNumber; i++) {
-		fastaDeallocateRecord(&array[i]);
-	}
 	free(array);
-
 
 	fclose(fp);
 
