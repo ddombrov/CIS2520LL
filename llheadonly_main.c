@@ -52,8 +52,6 @@ int processFasta(char *filename, double *timeTaken) {
 		} else if (status > 0) {
 			lineNumber += status;
 			recordNumber++;
-			//fastaPrintRecord(stdout, &fRecord);
-			//fastaClearRecord(&fRecord);
 
 			//make a node
 			void *value = malloc(sizeof(FASTArecord));
@@ -63,9 +61,6 @@ int processFasta(char *filename, double *timeTaken) {
 
 			//add node to end
 			l_head = llAppend(l_head, l_node);
-
-			//printf("%s - ", l_node->key);
-			
 
 		//if line read error
 		} else {
@@ -93,6 +88,8 @@ int processFasta(char *filename, double *timeTaken) {
 		free(next);
 	}
 	*/
+
+	//code borrowed from llFree function
 	LLvNode *next;
 
 	for ( ; l_head != NULL; l_head = next) {
@@ -128,7 +125,7 @@ int processFastaRepeatedly(char *filename, long repeatsRequested) {
 	}
 
 	//time display information
-	printf("%lf seconds taken for processing total\n", totalTimeInSeconds);
+	printf("%.3lf seconds taken for processing total\n", totalTimeInSeconds);
 
 	totalTimeInSeconds /= (double) repeatsRequested;
 

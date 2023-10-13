@@ -9,7 +9,7 @@
 int processFasta(char *filename, double *timeTaken) {
 
 	FILE *fp;
-	FASTArecord *fRecord;
+	FASTArecord *fRecord; //fastaAllocateRecord() returns FASTArecord *
 	int lineNumber = 0, recordNumber = 0, status;
 	int eofSeen = 0;
 	clock_t startTime, endTime;
@@ -107,7 +107,7 @@ int processFastaRepeatedly(char *filename, long repeatsRequested) {
 	}
 
 	//time display information
-	printf("%lf seconds taken for processing total\n", totalTimeInSeconds);
+	printf("%.3lf seconds taken for processing total\n", totalTimeInSeconds);
 
 	totalTimeInSeconds /= (double) repeatsRequested;
 

@@ -92,7 +92,7 @@ int processFastaRepeatedly(char *filename, long repeatsRequested) {
 	}
 
 	//time display information
-	printf("%lf seconds taken for processing total\n", totalTimeInSeconds);
+	printf("%.3lf seconds taken for processing total\n", totalTimeInSeconds);
 
 	totalTimeInSeconds /= (double) repeatsRequested;
 
