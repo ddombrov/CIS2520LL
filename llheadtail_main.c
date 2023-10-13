@@ -67,16 +67,19 @@ int processFasta(char *filename, double *timeTaken) {
 
                 l_tail = l_node;
 				l_head = l_node; 
+				//fastaDeallocateRecord(&fRecord);
 				
             } 
 			
 			//then have tail point to last node
 			if (l_tail !=NULL) {
-				l_tail = llAppend(l_tail->next, l_node);
+				//l_tail = llAppend(l_tail->next, l_node);
 				//l_tail=llPrepend(l_node, l_tail);
-                //l_tail->next = l_node;
+                l_tail->next = l_node;
 				//make tail the last node
-           		//l_tail = l_node;   
+           		l_tail = l_node;   
+				//fastaDeallocateRecord(&fRecord);
+				
             }
 
 			
